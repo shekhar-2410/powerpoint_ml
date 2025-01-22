@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const generateText = async (req, res) => {
+  
+  
   const { prompt } = req.body;
   try {
     const response = await axios.post(
