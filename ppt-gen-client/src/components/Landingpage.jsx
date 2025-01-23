@@ -1,8 +1,9 @@
 import { Box, Text, VStack, Button } from "@chakra-ui/react";
-
+import { useNavigate } from "react-router";
 import backImg from "../assets/background.jpg";
 
 const Landingpage = () => {
+  const navigation = useNavigate();
   return (
     <Box
       h="100vh"
@@ -46,7 +47,7 @@ const Landingpage = () => {
           No more manual formatting or design hassle—just focus on your content
           and let us handle the rest!
         </Text>
-        <Button padding={4} borderColor={"#fff"} variant={"outline"}>
+        <Button onClick={() => navigation("/ai-prompt")} padding={4} borderColor={"#fff"} variant={"outline"}>
           Get Started
         </Button>
       </VStack>
