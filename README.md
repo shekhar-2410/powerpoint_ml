@@ -1,7 +1,8 @@
 AI-Generated Presentation Slides
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/6031c1ff-616c-4e79-9bf5-4e8e4f8399f0)
 
-This project leverages Azure GPT-3.5-turbo for generating text content and DALL·E 3 for generating images. It allows users to provide a single prompt, and the system will generate a report containing text and image content. The content is then presented in a PowerPoint-like slide presentation format on the frontend.
+
+This project leverages Azure GPT-3.5-turbo for generating text content and DALL·E 3 for generating images. It allows users to provide a single prompt, and the system will generate a report containing text and image content. The content is then presented on the frontend in a PowerPoint-like slide presentation format.
 
 Table of Contents
 Project Overview
@@ -20,7 +21,7 @@ Enter a single prompt.
 Call the backend API to generate text and an image based on the prompt.
 Receive a JSON response containing the generated text and image.
 View the results in a presentation-like format, similar to PowerPoint slides.
-The frontend mimics a PowerPoint presentation interface where each generated slide takes up the entire screen. Users can easily navigate through the slides, view images and text, and present them just like in PowerPoint.
+The front end mimics a PowerPoint presentation interface where each generated slide takes up the entire screen. Users can easily navigate through the slides, view images and text, and present them just like in PowerPoint.
 
 Technologies Used
 Backend:
