@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import aiIllustration from "../assets/robot.png";
-
+import ppt_back from "../assets/prom_b3.png";
 const AIPromptPage = () => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -53,8 +53,7 @@ const AIPromptPage = () => {
       // Redirect with state
       navigate("/generated-content", {
         state: {
-          response: data.text,
-          imageUrl: data.imageUrl,
+          slides: data,
         },
       });
     } catch (error) {
@@ -73,9 +72,9 @@ const AIPromptPage = () => {
       h="100vh"
       flexDirection={{ base: "column", md: "row" }}
       p={4}
-      bgGradient="to-r"
-      gradientFrom="#ABAFD4"
-      gradientTo="#1C1C1C"
+      bgImage={`url(${ppt_back})`}
+      bgSize="cover"
+      bgPosition="center"
     >
       <ToastContainer />
 
@@ -101,24 +100,26 @@ const AIPromptPage = () => {
         alignItems="center"
       >
         <VStack spacing={6} align="stretch" w="90%">
-          <Text fontSize="2xl" fontWeight="bold" textAlign="center">
+          <Text color="#002329" fontSize="3xl" fontWeight="bold" textAlign="center">
             Type Your Prompt Below
           </Text>
           <Textarea
             placeholder="Enter your prompt..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            bg="gray.50"
+            bg="#B28003"
             borderColor="gray.300"
             resize="none"
             rows={6}
-            color={"black"}
+            padding={4}
+            color={"white"}
           />
           <Button
-            colorScheme="purple"
+            background={"#002329"}
             onClick={handleGenerate}
             isLoading={loading}
             loadingText="Generating..."
+            color={"white"}
           >
             Generate
           </Button>
