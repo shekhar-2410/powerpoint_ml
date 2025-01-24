@@ -1,4 +1,4 @@
-#AI-Generated Presentation Slides
+# AI-Generated Presentation Slides
 ![image](https://github.com/user-attachments/assets/6031c1ff-616c-4e79-9bf5-4e8e4f8399f0)
 
 
@@ -17,13 +17,13 @@ License
 Project Overview
 This project allows users to:
 
-Enter a single prompt.
+# Enter a single prompt.
 Call the backend API to generate text and an image based on the prompt.
 Receive a JSON response containing the generated text and image.
 View the results in a presentation-like format, similar to PowerPoint slides.
 The front end mimics a PowerPoint presentation interface where each generated slide takes up the entire screen. Users can easily navigate through the slides, view images and text, and present them just like in PowerPoint.
 
-Technologies Used
+# Technologies Used
 Backend:
 
 Node.js (Express)
@@ -40,7 +40,7 @@ Other Tools:
 
 Azure for API management and AI services
 GitHub for version control
-Features
+# Features
 Text and Image Generation: Generate text and images with a single prompt.
 JSON Response: Text and image data are combined into a single JSON response for easy handling.
 Presentation Mode: Display generated content in a presentation-like slide format.
@@ -49,7 +49,7 @@ Responsive Design: Optimized for both desktop and mobile devices, ensuring a smo
 Installation
 To run the project locally:
 
-Clone the repository:
+# Clone the repository:
 bash
 Copy
 Edit
@@ -108,8 +108,7 @@ Retrieve the generated slides.
 Frontend
 The frontend of the application displays the generated slides in full-screen presentation mode. It ensures that each slide is centered, with the image and text adjusted for optimal viewing.
 
-Key Frontend Features:
-Responsive Layout: Automatically adjusts to different screen sizes.
+# Key Frontend Features:
 Next/Previous Buttons: Navigate through slides using intuitive controls.
 Single Slide Mode: Each slide is shown one at a time in full screen, making the presentation smooth and engaging.
 Contributors
