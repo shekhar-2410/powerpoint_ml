@@ -12,7 +12,7 @@ export const generateImage = async (req, res) => {
       process.env.DALL_E_ENDPOINT,
       {
         prompt: prompt,
-        n: 2, // Number of images
+        n: 1, // Number of images
         size: "1024x1024", // Image size
       },
       {

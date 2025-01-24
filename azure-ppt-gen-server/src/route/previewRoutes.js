@@ -3,6 +3,6 @@ import { generatePreview} from "../controller/previewController.js";
 
 const router = express.Router();
 
-router.post("/generate-ppt", generatePreview);
+router.post("/generate-preview", generatePreview);
 
 export default router;
