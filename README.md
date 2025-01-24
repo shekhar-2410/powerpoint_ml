@@ -53,7 +53,7 @@ To run the project locally:
 bash
 Copy
 Edit
-git clone https://github.com/your-username/ai-presentation-generator.git
+git clone https://github.com/shekhar-2410/powerpoint_ml
 cd ai-presentation-generator
 Install dependencies:
 bash
