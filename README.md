@@ -45,7 +45,7 @@ Text and Image Generation: Generate text and images with a single prompt.
 JSON Response: Text and image data are combined into a single JSON response for easy handling.
 Presentation Mode: Display generated content in a presentation-like slide format.
 User Interaction: Users provide prompts, generate slides, and navigate through them as they would in PowerPoint.
-Responsive Design: Optimized for both desktop and mobile devices, ensuring a smooth user experience.
+
 Installation
 To run the project locally:
 
