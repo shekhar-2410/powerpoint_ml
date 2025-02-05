@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import aiIllustration from "../assets/robot.png";
-import ppt_back from "../assets/prom_b3.png";
+import ppt_back from "../assets/prb_back.jpg";
 const AIPromptPage = () => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -100,14 +100,14 @@ const AIPromptPage = () => {
         alignItems="center"
       >
         <VStack spacing={6} align="stretch" w="90%">
-          <Text color="#002329" fontSize="3xl" fontWeight="bold" textAlign="center">
+          <Text color="#fff" fontSize="3xl" fontWeight="bold" textAlign="center">
             Type Your Prompt Below
           </Text>
           <Textarea
             placeholder="Enter your prompt..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            bg="#B28003"
+           bg="rgba(209, 209, 209, 0.9)"
             borderColor="gray.300"
             resize="none"
             rows={6}
@@ -115,16 +115,16 @@ const AIPromptPage = () => {
             color={"white"}
           />
           <Button
-            background={"#002329"}
+            background={"#fff"}
             onClick={handleGenerate}
             isLoading={loading}
             loadingText="Generating..."
-            color={"white"}
+            color={"black"}
           >
             Generate
           </Button>
 
-          {loading && <Spinner ml={"50%"} color="purple.500" size="lg" />}
+          {loading && <Spinner ml={"50%"} color="blue.500" size="lg" />}
         </VStack>
       </Box>
     </Box>
