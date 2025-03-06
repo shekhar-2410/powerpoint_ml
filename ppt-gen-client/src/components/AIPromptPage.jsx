@@ -30,7 +30,7 @@ const AIPromptPage = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5001/api/generate-preview", {
+      const res = await fetch("http://68.154.99.58:5000/api/generate-preview", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,14 +100,19 @@ const AIPromptPage = () => {
         alignItems="center"
       >
         <VStack spacing={6} align="stretch" w="90%">
-          <Text color="#fff" fontSize="3xl" fontWeight="bold" textAlign="center">
+          <Text
+            color="#fff"
+            fontSize="3xl"
+            fontWeight="bold"
+            textAlign="center"
+          >
             Type Your Prompt Below
           </Text>
           <Textarea
             placeholder="Enter your prompt..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-           bg="rgba(209, 209, 209, 0.9)"
+            bg="rgba(209, 209, 209, 0.9)"
             borderColor="gray.300"
             resize="none"
             rows={6}
