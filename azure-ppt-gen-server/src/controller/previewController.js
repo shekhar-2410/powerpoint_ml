@@ -59,7 +59,7 @@ export const generatePreview = async (req, res) => {
         const imageResponse = await axios.post(
           process.env.DALL_E_ENDPOINT,
           {
-            prompt: `Generate an image related to the slide title: "${slide.title}" and content: "${slide.content}"`,
+            prompt: `Generate an image illustrating the concept of "${slide.title}"`,
             n: 1, // Generate one image at a time
             size: "1024x1024",
           },
@@ -72,7 +72,7 @@ export const generatePreview = async (req, res) => {
         );
         imageUrls.push(imageResponse.data.data[0].url);
         // Add a small delay to avoid hitting rate limits
-        await delay(1000);
+        await delay(3000);
       } catch (imageError) {
         console.error(
           `Error generating image for slide "${slide.title}":`,
