@@ -17,6 +17,6 @@ app.use("/api", gptRoute);
 app.use("/api", dallERoute);
 app.use("/api", pptRoute);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server started on port ${PORT}`);
 });
