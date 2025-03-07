@@ -23,8 +23,7 @@ const GeneratedContentPage = () => {
   const navigate = useNavigate();
 
   const slides = location.state?.slides?.slides || [];
-
-
+console.log(slides)
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [editedSlides, setEditedSlides] = useState(slides);

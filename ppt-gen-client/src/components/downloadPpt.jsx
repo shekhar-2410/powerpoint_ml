@@ -1,126 +1,97 @@
 import { Button } from "@chakra-ui/react";
-import genricimg from "../assets/generic.png"; // Your default image URL or base64 string
 import pptxgen from "pptxgenjs";
 import PropTypes from "prop-types";
-
-// Helper function to convert image to base64
-const getBase64Image = (url) => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "Anonymous"; // To avoid cross-origin issues
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const dataUrl = canvas.toDataURL(); // This will give you the base64 string
-      resolve(dataUrl);
-    };
-    img.onerror = (error) => reject(error);
-    img.src = url;
-  });
-};
-
+import placeholderImage from "../assets/generic.png";
+import flower from "../assets/flower.png";
 const PPTExport = ({ slides }) => {
-  const defaultImage = genricimg; // Default image URL or base64 string
+  const plantIconUrl = flower;
 
   const generatePPT = async () => {
-    const pptx = new pptxgen(); // Create an instance of pptxgen
+    const pptx = new pptxgen();
 
-    for (let slide of slides) {
+    for (let i = 0; i < slides.length; i++) {
+      const slide = slides[i];
       const slideData = pptx.addSlide();
+      slideData.background = { fill: "#F4F8FB" };
 
-      // Create a rectangle to simulate the gradient background
-      slideData.addShape("rect", {
+      // Styled left panel
+      slideData.addShape(pptx.ShapeType.rect, {
         x: 0,
         y: 0,
-        w: "100%",
+        w: "65%",
         h: "100%",
-        fill: { color: "#003366" }, // Solid color to act as base (dark blue)
+        fill: { color: "#E74C3C" },
       });
-
-      // Add a second rectangle on top to simulate the gradient effect
-      slideData.addShape("rect", {
+      slideData.addShape(pptx.ShapeType.rect, {
         x: 0,
-        y: 0,
+        y: "100%",
         w: "100%",
-        h: "100%",
-        fill: {
-          type: "gradient",
-          angle: 45,
-          stops: [
-            { color: "003366", position: 0 }, // Dark blue color
-            { color: "006699", position: 1 }, // Lighter blue color
-          ],
-        },
-        opacity: 0.5, // Adjust opacity for blending effect (optional)
+        h: "8%",
+        fill: { color: "#FAC2B6" },
       });
 
-      // Add title text with good contrast (white on dark blue)
-      slideData.addText(slide.title, {
-        x: 1,
+      // Slide number in bold
+      slideData.addText(`0${i + 1}`, {
+        x: 0.2,
         y: 0.5,
-        fontSize: 32,
-        fontFace: "Arial",
-        color: "FFFFFF", // White text for title (now readable against the gradient)
+        fontSize: 24,
+        fontFace: "Poppins",
         bold: true,
-        shadow: { blur: 6, angle: 45, distance: 3 }, // Adding shadow for better contrast
+        italic: true,
+        color: "#FFFFFF",
       });
 
-      // Add content text with a bit of spacing for readability
+      // Title properly aligned
+      slideData.addText(slide.title, {
+        x: 0.2,
+        y: 1.4,
+        fontSize: 30,
+        fontFace: "Poppins",
+        bold: true,
+        color: "#FFFFFF",
+        w: 5,
+        align: "left",
+      });
+
       slideData.addText(slide.content, {
-        x: 1,
-        y: 1.5,
+        x: 0.2,
+        y: 2.5,
+        w: 5,
+        h: 2,
         fontSize: 16,
-        fontFace: "Arial",
-        color: "FFFFFF", // White text for content (now visible with the dark background)
-        width: "80%",
-        height: 3,
-        lineSpacing: 20, // Line spacing to make text less cramped
+        fontFace: "Poppins",
+        color: "#FFFFFF",
+        lineSpacing: 30,
+        align: "left",
       });
 
-      // Check if imageUrl exists and is valid, if not use the default image
-      let imageUrl = slide.imageUrl || defaultImage;
-
-      if (imageUrl && !imageUrl.startsWith("data:image")) {
-        try {
-          // Convert URL to base64 if it's a URL and not already base64
-          imageUrl = await getBase64Image(imageUrl);
-        } catch (error) {
-          console.log("Error converting image to base64:", error);
-          // If there's an error, you can fallback to the default image
-          imageUrl = defaultImage;
-        }
-      }
-
-      // Determine if image should go on the left or right
-      const imagePosition = slide.imagePosition || "left"; // "left" or "right"
-
-      const imageX = imagePosition === "left" ? 0.5 : 5; // Adjust X position based on "left" or "right"
-      const imageWidth = imagePosition === "left" ? 4 : 4; // Adjust width to fit well
-      const imageHeight = 3; // Fixed height for the image
-
-      // Add image with border and shadow
+      // Image inside a circular shape for better aesthetics
+      const imageToUse = slide.imageUrl || placeholderImage;
       slideData.addImage({
-        x: imageX,
-        y: 2.5,
-        w: imageWidth,
-        h: imageHeight,
-        data: imageUrl, // Image data (base64 or URL)
-        border: { color: "FFFFFF", pt: 2 }, // Adding white border around the image for contrast
-        shadow: { blur: 6, angle: 45, distance: 3 }, // Shadow effect for better visibility
+        path: imageToUse,
+        x: "53%",
+        y: "21%",
+        w: "45%",
+        h: "55%",
+      });
+
+      slideData.addImage({
+        path: plantIconUrl,
+        x: "83%",
+        y: "80%",
+        w: "18%",
+        h: "25%",
       });
     }
 
-    pptx.writeFile({ fileName: "presentation.pptx" });
+    pptx.writeFile({ fileName: "modern_presentation.pptx" });
   };
 
   return (
     <Button
-      background={"#002329"} // Dark button background
+      background={"#002329"}
       variant="solid"
-      color={"white"} // White text on button
+      color={"white"}
       paddingX={"20px"}
       onClick={generatePPT}
     >
