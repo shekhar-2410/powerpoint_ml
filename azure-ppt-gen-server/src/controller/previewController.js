@@ -1,6 +1,37 @@
+
 import axios from "axios";
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Delay helper function
+
+// Function to generate image with retry logic
+const generateImageWithRetry = async (slide, retries = 3) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await axios.post(
+        process.env.DALL_E_ENDPOINT,
+        {
+          prompt: `Generate an image illustrating the concept of "${slide.title}"`,
+          n: 1,
+          size: "1024x1024",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": process.env.DALL_E_KEY,
+          },
+        }
+      );
+      return response.data.data[0].url;
+    } catch (error) {
+      console.error(
+        `Attempt ${i + 1} failed for "${slide.title}":`,
+        error.message
+      );
+      await delay(3000); // Wait before retrying
+    }
+  }
+  return null; // Return null if all retries fail
+};
 
 export const generatePreview = async (req, res) => {
   const { prompt } = req.body;
@@ -52,35 +83,11 @@ export const generatePreview = async (req, res) => {
       });
     }
 
-    // Step 2: Generate Images for each Slide using DALL-E
-    const imageUrls = [];
-    for (const slide of slideText.slides) {
-      try {
-        const imageResponse = await axios.post(
-          process.env.DALL_E_ENDPOINT,
-          {
-            prompt: `Generate an image illustrating the concept of "${slide.title}"`,
-            n: 1, // Generate one image at a time
-            size: "1024x1024",
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "api-key": process.env.DALL_E_KEY,
-            },
-          }
-        );
-        imageUrls.push(imageResponse.data.data[0].url);
-        // Add a small delay to avoid hitting rate limits
-        await delay(3000);
-      } catch (imageError) {
-        console.error(
-          `Error generating image for slide "${slide.title}":`,
-          imageError.message
-        );
-        imageUrls.push(null); // Push `null` for slides where image generation fails
-      }
-    }
+    // Step 2: Generate Images for each Slide using DALL-E with retries
+    const imagePromises = slideText.slides.map((slide) =>
+      generateImageWithRetry(slide)
+    );
+    const imageUrls = await Promise.all(imagePromises); // Run image generation in parallel
 
     // Step 3: Attach Images to Slides
     const slidesWithImages = slideText.slides.map((slide, index) => ({
