@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms)); // Delay helper function
@@ -56,7 +55,7 @@ export const generatePreview = async (req, res) => {
             }`,
           },
         ],
-        max_tokens: 1000,
+        max_tokens: 4000,
         temperature: 0.7,
       },
       {
