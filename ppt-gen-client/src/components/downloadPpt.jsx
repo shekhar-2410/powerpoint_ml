@@ -45,7 +45,7 @@ const PPTExport = ({ slides }) => {
       slideData.addText(slide.title, {
         x: 0.2,
         y: 1.4,
-        fontSize: 30,
+        fontSize: 27,
         fontFace: "Poppins",
         bold: true,
         color: "#FFFFFF",
@@ -58,7 +58,7 @@ const PPTExport = ({ slides }) => {
         y: 2.5,
         w: 5,
         h: 2,
-        fontSize: 16,
+        fontSize: 14,
         fontFace: "Poppins",
         color: "#FFFFFF",
         lineSpacing: 30,
