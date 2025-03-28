@@ -137,14 +137,14 @@ const PPTExport = ({ slides }) => {
       // TRL Circle
       slideData.addShape(pptx.ShapeType.ellipse, {
         x: "47%",
-        y: "0.8%",
+        y: "2%",
         w: circleSize,
         h: circleSize,
         fill: { color: "#003F80" }, // Dark Blue
       });
       slideData.addText("TRL", {
         x: "47.2%",
-        y: "5.6%",
+        y: "6.9%",
         fontSize: 10,
         fontFace: "Roboto",
         bold: true,
@@ -155,14 +155,14 @@ const PPTExport = ({ slides }) => {
       // CRI Circle
       slideData.addShape(pptx.ShapeType.ellipse, {
         x: "53%",
-        y: "0.8%",
+        y: "2%",
         w: circleSize,
         h: circleSize,
         fill: { color: "#003F80" }, // Dark Blue
       });
       slideData.addText("CRI", {
         x: "53.2%",
-        y: "5.6%",
+        y: "6.9%",
         fontSize: 10,
         fontFace: "Roboto",
         bold: true,
@@ -173,7 +173,7 @@ const PPTExport = ({ slides }) => {
       // // Blue Ribbon for Section Title
       slideData.addShape(pptx.ShapeType.rect, {
         x: "60%",
-        y: "1.7%",
+        y: "3%",
         w: "17%",
         h: "8%",
         fill: { color: "#0471E1" },
@@ -189,7 +189,7 @@ const PPTExport = ({ slides }) => {
         slide.sectionTitle || "Solvent-Based Systems\n- Liquid absorption",
         {
           x: "60.5%",
-          y: "5.5%",
+          y: "6.5%",
           fontSize: 10,
           bold: true,
           color: "#FFFFFF",
@@ -199,7 +199,7 @@ const PPTExport = ({ slides }) => {
       // Logo inside shape with a different fill color
       slideData.addShape(pptx.ShapeType.rect, {
         x: "79%",
-        y: "0.7%",
+        y: "2%",
         w: "16%",
         h: "10%",
         fill: { color: "#B0DAF1" },
@@ -207,7 +207,7 @@ const PPTExport = ({ slides }) => {
       slideData.addImage({
         path: logo,
         x: "83.3%",
-        y: "0.7%",
+        y: "2%",
         w: "8%",
         h: "10%",
       });
@@ -225,8 +225,8 @@ const PPTExport = ({ slides }) => {
         path: slide.imageUrl || placeholderImage,
         x: 0.3,
         y: 1,
-        w: "35%", // Slightly reduced width for spacing
-        h: "30%", // Slightly reduced height for spacing
+        w: "35%",
+        h: "30%",
         shadow: { type: "outer", color: "#888888", blur: 5, offset: 3 },
       });
 
@@ -245,7 +245,7 @@ const PPTExport = ({ slides }) => {
 
       slideData.addText(slide.title || "Section 1", {
         x: sectionX,
-        y: 0.7,
+        y: 1.1,
         w: sectionWidth,
         h: sectionHeight,
         fontSize: 13,
@@ -263,7 +263,7 @@ const PPTExport = ({ slides }) => {
 
       slideData.addText(slide.title || "Section 2", {
         x: "68%",
-        y: 0.7,
+        y: 1.1,
         w: sectionWidth,
         h: sectionHeight,
         fontSize: 13,
@@ -281,7 +281,7 @@ const PPTExport = ({ slides }) => {
 
       slideData.addText(slide.title || "Section 3", {
         x: sectionX,
-        y: 2.9,
+        y: 3.3,
         w: sectionWidth,
         h: sectionHeight,
         fontSize: 13,
@@ -299,7 +299,7 @@ const PPTExport = ({ slides }) => {
 
       slideData.addText(slide.title || "Section 4", {
         x: "68%",
-        y: 2.9,
+        y: 3.3,
         w: sectionWidth,
         h: sectionHeight,
         fontSize: 13,
@@ -321,7 +321,7 @@ const PPTExport = ({ slides }) => {
         y: "95%",
         w: "100%",
         h: "5%",
-        fill: { color: "#002329" },
+        fill: { color: "#003F80" },
       });
     }
 
