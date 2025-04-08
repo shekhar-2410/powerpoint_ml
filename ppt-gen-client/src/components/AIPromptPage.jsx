@@ -11,8 +11,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import aiIllustration from "../assets/robot.png";
-import ppt_back from "../assets/prb_back.jpg";
+import aiIllustration from "../assets/robot2.png";
+import { keyframes } from "@emotion/react";
+
 const AIPromptPage = () => {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,9 +29,8 @@ const AIPromptPage = () => {
     }
 
     setLoading(true);
-
     try {
-      const res = await fetch("http://68.154.99.58:5000/api/generate-preview", {
+      const res = await fetch("http://localhost:5001/api/generate-preview", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,23 +38,16 @@ const AIPromptPage = () => {
         body: JSON.stringify({ prompt }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to generate preview. Please try again.");
-      }
+      if (!res.ok) throw new Error("Failed to generate preview.");
 
       const data = await res.json();
-      console.log(data);
-
-      toast.success("Content generated successfully!", {
+      toast.success("Generated!", {
         position: "top-right",
         autoClose: 3000,
       });
 
-      // Redirect with state
       navigate("/generated-content", {
-        state: {
-          slides: data,
-        },
+        state: { slides: data },
       });
     } catch (error) {
       toast.error(error.message, {
@@ -65,72 +58,106 @@ const AIPromptPage = () => {
       setLoading(false);
     }
   };
-
+  const float = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
+`;
   return (
     <Box
-      display="flex"
       h="100vh"
+      display="flex"
       flexDirection={{ base: "column", md: "row" }}
-      p={4}
-      bgImage={`url(${ppt_back})`}
-      bgSize="cover"
-      bgPosition="center"
+      overflow="hidden"
+      bg="linear-gradient(to bottom, #003B67,rgb(1, 4, 30))"
     >
       <ToastContainer />
 
-      {/* Static Image (no animation) */}
+      {/* Left: Neon Robot Image */}
       <Box
         flex="1"
         display="flex"
         justifyContent="center"
         alignItems="center"
-        bgGradient="linear(to-r, #ABAFD4, #1C1C1C)"
-        borderRadius="lg"
-        p={4}
-      >
-        <Image src={aiIllustration} alt="AI Robot" maxW="70%" />
-      </Box>
-
-      <Box
-        flex="1"
         p={6}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
+        bg="transparent"
       >
-        <VStack spacing={6} align="stretch" w="90%">
+        <VStack
+          spacing={6}
+          w="100%"
+          maxW="500px"
+          bg="rgba(255, 255, 255, 0.05)"
+          border="1px solid rgb(3, 69, 251)"
+          borderRadius="2xl"
+          backdropFilter="blur(16px)"
+          p={8}
+          boxShadow="0 0 40px rgba(3, 69, 251, 0.4)"
+        >
           <Text
-            color="#fff"
-            fontSize="3xl"
+            fontSize="2xl"
             fontWeight="bold"
+            color="cyan.200"
             textAlign="center"
           >
-            Type Your Prompt Below
+            🔷 AI Digital Assistant
           </Text>
+
+          <Text fontSize="md" color="gray.300" textAlign="center">
+            Enter your prompt to generate futuristic AI content.
+          </Text>
+
           <Textarea
-            placeholder="Enter your prompt..."
+            placeholder="Type your AI prompt here..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            bg="rgba(209, 209, 209, 0.9)"
-            borderColor="gray.300"
-            resize="none"
-            rows={6}
-            padding={4}
-            color={"white"}
+            bg="rgba(255, 255, 255, 0.05)"
+            border="1px solid cyan"
+            color="white"
+            rows={5}
+            _focus={{
+              borderColor: "cyan.400",
+              boxShadow: "0 0 8px cyan",
+            }}
           />
+
           <Button
-            background={"#fff"}
+            w="100%"
+            bgGradient="linear(to-r, #00FFFF, #3D5AFE)"
+            color="black"
+            fontWeight="bold"
+            _hover={{
+              transform: "scale(1.05)",
+              boxShadow: "0 0 20px rgba(0,255,255,0.5)",
+            }}
             onClick={handleGenerate}
             isLoading={loading}
             loadingText="Generating..."
-            color={"black"}
           >
-            Generate
+            ✨ Generate
           </Button>
 
-          {loading && <Spinner ml={"50%"} color="blue.500" size="lg" />}
+          {loading && <Spinner color="cyan.400" />}
         </VStack>
+      </Box>
+
+      {/* Right: Prompt Area */}
+
+      <Box
+        flex="1"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        p={6}
+        bg="transparent"
+      >
+        <Image
+          src={aiIllustration}
+          alt="Futuristic AI Bot"
+          maxH="100%"
+          maxW="100%"
+          objectFit="contain"
+          animation={`${float} 3s ease-in-out infinite`}
+        />
       </Box>
     </Box>
   );

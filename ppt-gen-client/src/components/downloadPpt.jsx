@@ -105,6 +105,7 @@
 // };
 
 // export default PPTExport;
+
 import { Button } from "@chakra-ui/react";
 import pptxgen from "pptxgenjs";
 import PropTypes from "prop-types";
@@ -114,22 +115,32 @@ import logo from "../assets/flower.png";
 const PPTExport = ({ slides }) => {
   const generatePPT = async () => {
     const pptx = new pptxgen();
+    const slidesArray = slides.slides;
+    const slideTitle = slides.title;
 
-    for (let i = 0; i < slides.length; i++) {
-      const slide = slides[i];
-      console.log(slide[i]);
+    if (!Array.isArray(slidesArray) || slidesArray.length === 0) {
+      console.warn("No slides data available!");
+      return;
+    }
+    for (let i = 0; i < slidesArray.length; i++) {
+      const slide = slidesArray[i];
 
       const slideData = pptx.addSlide();
       slideData.background = { fill: "#F4F8FB" };
 
       // Header
-      slideData.addText(slide.projectName || "CESAR-1 | AURORA Project", {
-        x: 0.2,
-        y: 0.4,
-        fontSize: 19,
-        fontFace: "Roboto",
-        color: "#0471E1",
-      });
+      slideData.addText(
+        (slideTitle || "CESAR-1 | AURORA Project").toUpperCase(),
+        {
+          x: 0.1,
+          y: 0.4,
+          fontSize: 18,
+          fontFace: "Roboto",
+          color: "#0471E1",
+          textTransform: "uppercase",
+          w: "40%",
+        }
+      );
 
       // Circular TRL & CRI Indicators
       const circleSize = 0.5; // Define size for uniformity
@@ -196,7 +207,6 @@ const PPTExport = ({ slides }) => {
         }
       );
 
-      // Logo inside shape with a different fill color
       slideData.addShape(pptx.ShapeType.rect, {
         x: "79%",
         y: "2%",
@@ -230,89 +240,47 @@ const PPTExport = ({ slides }) => {
         shadow: { type: "outer", color: "#888888", blur: 5, offset: 3 },
       });
 
-      slideData.addText("Technology Parameters", {
-        x: 0.7,
+      slideData.addText(slide.title || "Technology Parameters", {
+        x: 0.3,
         y: 3,
         fontSize: 16,
         bold: true,
         color: "#002329",
+        w: "35%",
       });
 
-      // Right Side (Aligned Sections in Grid Layout)
-      const sectionX = "40%";
+      const sectionPositions = [
+        { x: "40%", y: 1.1 }, // Top Left (Section 1)
+        { x: "68%", y: 1.1 }, // Top Right (Section 2)
+        { x: "40%", y: 3.3 }, // Bottom Left (Section 3)
+        { x: "68%", y: 3.3 }, // Bottom Right (Section 4)
+      ];
+
       const sectionWidth = "28%";
       const sectionHeight = "10%";
 
-      slideData.addText(slide.title || "Section 1", {
-        x: sectionX,
-        y: 1.1,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 13,
-        bold: true,
-        color: "#0471E1",
-      });
-      slideData.addText(slide.content || "Dummy content for section 1", {
-        x: sectionX,
-        y: 1.8,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 10,
-        color: "#002329",
-      });
+      // Loop through the first 4 subsections and place them in the 2x2 grid layout
+      slide.subsections.slice(0, 4).forEach((sub, index) => {
+        const pos = sectionPositions[index]; // Get the respective position from the grid
 
-      slideData.addText(slide.title || "Section 2", {
-        x: "68%",
-        y: 1.1,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 13,
-        bold: true,
-        color: "#0471E1",
-      });
-      slideData.addText(slide.content || "Dummy content for section 2", {
-        x: "68%",
-        y: 1.8,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 10,
-        color: "#002329",
-      });
+        slideData.addText(sub.subtitle || `Section ${index + 1}`, {
+          x: pos.x,
+          y: pos.y,
+          w: sectionWidth,
+          h: sectionHeight,
+          fontSize: 13,
+          bold: true,
+          color: "#0471E1",
+        });
 
-      slideData.addText(slide.title || "Section 3", {
-        x: sectionX,
-        y: 3.3,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 13,
-        bold: true,
-        color: "#0471E1",
-      });
-      slideData.addText(slide.content || "Dummy content for section 3", {
-        x: sectionX,
-        y: 4,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 10,
-        color: "#002329",
-      });
-
-      slideData.addText(slide.title || "Section 4", {
-        x: "68%",
-        y: 3.3,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 13,
-        bold: true,
-        color: "#0471E1",
-      });
-      slideData.addText(slide.content || "Dummy content for section 4", {
-        x: "68%",
-        y: 4,
-        w: sectionWidth,
-        h: sectionHeight,
-        fontSize: 10,
-        color: "#002329",
+        slideData.addText(sub.content || "No content available", {
+          x: pos.x,
+          y: pos.y + 0.5, // Slightly below the subtitle
+          w: sectionWidth,
+          h: sectionHeight,
+          fontSize: 10,
+          color: "#002329",
+        });
       });
 
       // Footer Bar
