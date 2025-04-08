@@ -162,6 +162,8 @@ export const generatePreview = async (req, res) => {
         
             - Create a professional and concise title instead of just copying the prompt.
             - Ensure the slides cover key aspects of the topic.
+            - Limit title length to max 8 words or 60 characters.
+            - Trim any trailing punctuation.
             - Format the JSON output as follows:
         
             {
