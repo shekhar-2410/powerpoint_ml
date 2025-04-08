@@ -30,7 +30,7 @@ const AIPromptPage = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5001/api/generate-preview", {
+      const res = await fetch("http://68.154.99.58:5000/api/generate-preview", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
