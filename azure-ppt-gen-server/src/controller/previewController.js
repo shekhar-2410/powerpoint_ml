@@ -51,7 +51,7 @@ export const generatePreview = async (req, res) => {
             Follow these rules strictly:
             
             - **Presentation Title**: Summarize the topic in 8 words or fewer, max 60 characters. Avoid trailing punctuation.
-            - **Slides**: Generate 3 to 6 slides that thoroughly cover the topic.
+            - **Slides**: Generate 5 to 8 slides that thoroughly cover the topic.
             - **Each Slide Must Contain**:
               - A clear, informative **slide title**.
               - **Four subsections**:
