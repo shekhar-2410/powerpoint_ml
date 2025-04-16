@@ -46,35 +46,41 @@ export const generatePreview = async (req, res) => {
         messages: [
           {
             role: "user",
-            content: `Generate a structured JSON presentation based on the topic: "${prompt}". 
+            content: `Generate a structured JSON presentation based on the topic: "${prompt}".
 
-- Create a professional and concise title instead of just copying the prompt.
-- Ensure the slides cover key aspects of the topic.
-- Limit title length to max 8 words or 60 characters.
-- Trim any trailing punctuation.
-- For each slide, include:
-  - A title
-  - Four informative subsections with subtitles and descriptions
-  - A table with numerical/statistical data (at least 2-4 rows and 2+ columns). If data is not available, simulate relevant data.
-- Format the JSON output as follows:
-
-{
-  "title": "A well-structured title summarizing the topic",
-  "slides": [
-    {
-      "title": "A well-structured title summarizing the slide",
-      "subsections": [
-        {"subtitle": "Subtitle 1", "content": "Detailed explanation for subtitle 1"},
-        {"subtitle": "Subtitle 2", "content": "Detailed explanation for subtitle 2"},
-        {"subtitle": "Subtitle 3", "content": "Detailed explanation for subtitle 3"},
-        {"subtitle": "Subtitle 4", "content": "Detailed explanation for subtitle 4"}
-      ],
+            Follow these rules strictly:
+            
+            - **Presentation Title**: Summarize the topic in 8 words or fewer, max 60 characters. Avoid trailing punctuation.
+            - **Slides**: Generate 3 to 6 slides that thoroughly cover the topic.
+            - **Each Slide Must Contain**:
+              - A clear, informative **slide title**.
+              - **Four subsections**:
+                - Each must have a **subtitle** and a **content** field.
+                - The **content must be at least 30 words** (or 200 characters) long to ensure depth.
+              - **One table** per slide:
+                - Include **realistic or simulated numerical data**.
+                - Table should have **2 to 5 columns** and **2 to 4 rows**.
+                - Column headers must be relevant to the topic.
+            - Return only a **well-formatted JSON** as per the following structure:
+            
+            {
+              "title": "A concise and professional presentation title",
+              "slides": [
+                {
+                  "title": "Slide title here",
+                  "subsections": [
+                    {"subtitle": "Subtitle 1", "content": "Detailed explanation for subtitle 1 (min 30 words)"},
+                    {"subtitle": "Subtitle 2", "content": "Detailed explanation for subtitle 2 (min 30 words)"},
+                    {"subtitle": "Subtitle 3", "content": "Detailed explanation for subtitle 3 (min 30 words)"},
+                    {"subtitle": "Subtitle 4", "content": "Detailed explanation for subtitle 4 (min 30 words)"}
+                  ],
       "table": {
-        "headers": ["Header 1", "Header 2", "Header 3"],
+        "headers": ["Header 1", "Header 2", "Header 3",],
         "rows": [
           ["Row1-Col1", "Row1-Col2", "Row1-Col3", "Row1-Col4"],
           ["Row2-Col1", "Row2-Col2", "Row2-Col3", "Row2-Col4"],
-          ["Row3-Col1", "Row3-Col2", "Row3-Col3", "Row3-Col4"]
+          ["Row3-Col1", "Row3-Col2", "Row3-Col3", "Row3-Col4"],
+          ["Row4-Col1", "Row4-Col2", "Row4-Col3", "Row4-Col4"
         
         ]
       }
