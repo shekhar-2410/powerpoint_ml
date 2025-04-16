@@ -9,7 +9,6 @@ const PPTExport = ({ slides }) => {
     const pptx = new pptxgen();
     const slidesArray = slides?.slides || [];
     const slideTitle = slides?.title || "CESAR-1 | AURORA Project";
-
     const sanitizeText = (text) =>
       typeof text === "string" && text.trim().length > 0
         ? text.replace(/[^\p{ASCII}]/gu, "")
@@ -168,13 +167,40 @@ const PPTExport = ({ slides }) => {
       }
 
       slideData.addText(sanitizeText(slide.title || "Technology Parameters"), {
-        x: 0.3,
+        x: 0.2,
         y: 3,
         fontSize: 16,
         bold: true,
         color: "#002329",
         w: "35%",
       });
+
+      // table
+      if (slide.table && slide.table.headers && slide.table.rows) {
+        const tableRows = [
+          slide.table.headers.map((header) => sanitizeText(header)),
+          ...slide.table.rows.map((row) =>
+            row.map((cell) => sanitizeText(cell))
+          ),
+        ];
+
+        slideData.addTable(tableRows, {
+          x: 0.3,
+          y: 3.3,
+          w: 3.4,
+          h: 1,
+          colW: [0.2, 0.2, 0.5, 0.6, 0.6],
+          rowH: 0.2,
+          fontSize: 9,
+          border: { type: "solid", color: "#0471E1", pt: 1 },
+          fill: "F4F8FB",
+          color: "002329",
+          bold: true,
+          align: "center",
+          valign: "middle",
+          autoPage: false,
+        });
+      }
 
       const sectionPositions = [
         { x: "40%", y: 1.1 },
@@ -204,7 +230,7 @@ const PPTExport = ({ slides }) => {
 
         slideData.addText(sanitizeText(sub.content || "No content available"), {
           x: pos.x,
-          y: pos.y + 0.5,
+          y: pos.y + 0.8,
           w: sectionWidth,
           h: sectionHeight,
           fontSize: 10,
@@ -226,9 +252,9 @@ const PPTExport = ({ slides }) => {
 
   return (
     <Button
-      background={"#002329"}
+      background={"gray.200"}
       variant="solid"
-      color={"white"}
+      color={"gray.900"}
       paddingX={"20px"}
       onClick={generatePPT}
     >

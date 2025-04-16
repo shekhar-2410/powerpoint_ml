@@ -47,7 +47,12 @@ const Landingpage = () => {
           No more manual formatting or design hassle—just focus on your content
           and let us handle the rest!
         </Text>
-        <Button onClick={() => navigation("/ai-prompt")} padding={4} borderColor={"#fff"} variant={"outline"}>
+        <Button
+          onClick={() => navigation("/ai-prompt")}
+          padding={4}
+          borderColor={"#fff"}
+          variant={"outline"}
+        >
           Get Started
         </Button>
       </VStack>
@@ -56,3 +61,5 @@ const Landingpage = () => {
 };
 
 export default Landingpage;
+
+

@@ -11,13 +11,13 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { BsFullscreen, BsFullscreenExit } from "react-icons/bs";
 import pptbacg from "../assets/geometric-back.jpg";
 import genricimg from "../assets/generic.png";
 import PPTExport from "./downloadPpt";
-
+import SlideTable from "./SlidesTable";
 const GeneratedContentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const GeneratedContentPage = () => {
 
   const fullscreenContainerRef = useRef(null);
 
-  const currentSlide = editedSlides[currentSlideIndex];
+  const currentSlide = editedSlides[currentSlideIndex] || {};
 
   const handleGoBack = () => navigate("/");
 
@@ -57,23 +57,6 @@ const GeneratedContentPage = () => {
     updatedSlides[slideIndex].subsections[subIndex][field] = e.target.value;
     setEditedSlides(updatedSlides);
   };
-  const addNewSlide = () => {
-    const newSlide = {
-      title: "",
-      imageUrl: "",
-      subsections: [
-        { subtitle: "", content: "" },
-        { subtitle: "", content: "" },
-        { subtitle: "", content: "" },
-        { subtitle: "", content: "" },
-      ],
-    };
-    const updatedSlides = [...editedSlides, newSlide];
-    setEditedSlides(updatedSlides);
-    setTimeout(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    }, 100);
-  };
 
   // Request fullscreen
   const handleFullscreen = () => {
@@ -88,6 +71,36 @@ const GeneratedContentPage = () => {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // ArrowRight: Next slide
+      if (e.key === "ArrowRight") {
+        setCurrentSlideIndex((prev) =>
+          Math.min(prev + 1, editedSlides.length - 1)
+        );
+      }
+
+      // ArrowLeft: Previous slide
+      if (e.key === "ArrowLeft") {
+        setCurrentSlideIndex((prev) => Math.max(prev - 1, 0));
+      }
+    };
+
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        setIsFullscreen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, [editedSlides.length, currentSlideIndex]);
+
   return (
     <Box
       position="absolute"
@@ -99,15 +112,17 @@ const GeneratedContentPage = () => {
       zIndex={isFullscreen ? 5 : "auto"}
     >
       <Box
-        p={0}
+        p={6}
         position="relative"
         minHeight="100vh"
         backgroundImage={`url(${pptbacg})`}
         backgroundSize="cover"
         backgroundPosition="center"
-        backgroundColor={isFullscreen ? "rgba(0, 0, 0, 0.42)" : "transparent"}
+        bg="gray.900"
+        color="white"
         overflowY={"hidden"}
         ref={fullscreenContainerRef}
+        overflowX={"hidden"}
       >
         {editedSlides.length > 0 ? (
           <>
@@ -118,100 +133,157 @@ const GeneratedContentPage = () => {
               onClick={handleFullscreen}
               aria-label="Toggle Fullscreen"
               size="lg"
-              zIndex={10}
+              zIndex={100}
               variant={"outline"}
               _hover={{ bg: "transparent" }}
               fontWeight={"bold"}
-              color={isFullscreen ? "#fff" : "black"}
-              borderColor={isFullscreen ? "#fff" : "black"}
+              color={"gray.200"}
+              borderColor={"gray.500"}
             >
               {isFullscreen ? <BsFullscreenExit /> : <BsFullscreen />}
             </IconButton>
 
+            {!isFullscreen && (
+              <Box as="header" width="90%" px={{ base: 4, md: 8 }} mt={-2}>
+                <Flex
+                  align="center"
+                  justify="space-between"
+                  direction={{ base: "column", md: "row" }}
+                  gap={{ base: 3, md: 6 }}
+                >
+                  {/* Buttons */}
+                  <Flex gap={3} direction={{ base: "column", md: "row" }}>
+                    <Button
+                      background="gray.200"
+                      variant="solid"
+                      color="gray.900"
+                      px="20px"
+                      onClick={handleGoBack}
+                      width={{ base: "100%", md: "auto" }}
+                    >
+                      Go Back
+                    </Button>
+                    <Box width={{ base: "100%", md: "auto" }}>
+                      <PPTExport slides={ppt_data} />
+                    </Box>
+                  </Flex>
+
+                  {/* Center: Title */}
+                  <Box flex="1" textAlign="center">
+                    <Text
+                      fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+                      fontWeight="bold"
+                      color="white"
+                      noOfLines={1}
+                    >
+                      {slideHeader}
+                    </Text>
+                  </Box>
+
+                  {/* Right: Export */}
+                </Flex>
+              </Box>
+            )}
+
             {isFullscreen ? (
               <Box
-                display="flex"
-                flexDirection="column"
-                height="100vh"
                 position="absolute"
                 top={0}
                 left={0}
                 right={0}
                 bottom={0}
-                bg="rgba(0, 0, 0, 0.38)"
+                bg="gray.900"
                 color="white"
-                padding="24px"
+                p={6}
+                overflow="hidden"
               >
-                {/* Slide Header */}
-                <Text
-                  fontSize="4xl"
-                  fontWeight="bold"
-                  textAlign="center"
-                  mb={6}
+                {/* Centering Wrapper */}
+                <Flex
+                  direction="column"
+                  justify="center"
+                  align="center"
+                  height="100%"
+                  overflow="auto"
                 >
-                  {slideHeader}
-                </Text>
+                  {/* Slide Header */}
+                  <Text
+                    fontSize="4xl"
+                    fontWeight="bold"
+                    textAlign="center"
+                    mb={6}
+                  >
+                    {slideHeader}
+                  </Text>
 
-                {/* Split Section */}
-                <Box
-                  minH="100vh"
-                  px={12}
-                  py={8}
-                  bgGradient="linear(to-r, #0f2027, #203a43, #2c5364)"
-                  color="white"
-                >
-                  <Flex flex="1" gap={12} align="center" justify="center">
-                    {/* Left Side */}
+                  {/* Main Content Area */}
+                  <Flex
+                    direction={{ base: "column", md: "row" }}
+                    gap={6}
+                    width="100%"
+                    maxW="1200px"
+                  >
+                    {/* Left Section */}
                     <Flex
-                      flex="1"
                       direction="column"
-                      align="center"
-                      justify="center"
+                      flex="0.8"
+                      bg="gray.800"
+                      p={4}
+                      borderRadius="sm"
+                      // align="center"
                     >
                       <Image
                         src={currentSlide.imageUrl || genricimg}
-                        alt="Slide"
-                        maxH="500px"
-                        borderRadius="lg"
-                        objectFit="contain"
-                        mb={4}
-                        mt={-4}
-                        boxShadow="0 8px 30px rgba(0, 0, 0, 0.3)"
+                        maxHeight="260px"
+                        objectFit="cover"
+                        borderRadius="sm"
+                        boxShadow="lg"
                       />
+
+                      {currentSlide.table && (
+                        <Box mt={-4} overflowY="auto">
+                          <SlideTable
+                            headers={currentSlide.table.headers}
+                            rows={currentSlide.table.rows}
+                          />
+                        </Box>
+                      )}
                     </Flex>
 
-                    {/* Right Side */}
-                    <Flex direction="column" flex="1">
+                    {/* Right Section */}
+                    <Flex
+                      direction="column"
+                      flex="1"
+                      bg="gray.800"
+                      p={6}
+                      borderRadius="md"
+                    >
                       <Text
-                        fontSize="3xl"
+                        fontSize="2xl"
                         fontWeight="bold"
-                        mb={6}
-                        textAlign="center"
                         color="cyan.300"
+                        mb={4}
                       >
                         {currentSlide.title}
                       </Text>
 
-                      <SimpleGrid columns={2} spacing={8} flex="1">
+                      <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
                         {currentSlide.subsections?.map((sub, idx) => (
                           <Box
                             key={idx}
-                            bg="rgba(255, 255, 255, 0.05)"
-                            borderRadius="lg"
-                            p={6}
-                            boxShadow="0 4px 30px rgba(0, 0, 0, 0.1)"
-                            border="1px solid rgba(255, 255, 255, 0.2)"
-                            backdropFilter="blur(8px)"
+                            bg="gray.700"
+                            borderRadius="md"
+                            p={4}
+                            border="1px solid rgba(255, 255, 255, 0.15)"
+                            transition="all 0.3s ease"
                             _hover={{
-                              transform: "scale(1.02)",
-                              transition: "all 0.3s ease",
-                              boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
+                              transform: "translateY(-4px)",
+                              boxShadow: "xl",
                             }}
                           >
-                            <Text fontSize="xl" fontWeight="bold" mb={2}>
+                            <Text fontSize="lg" fontWeight="bold" mb={2}>
                               {sub.subtitle}
                             </Text>
-                            <Text fontSize="md" opacity={0.85}>
+                            <Text fontSize="sm" opacity={0.9}>
                               {sub.content}
                             </Text>
                           </Box>
@@ -219,35 +291,41 @@ const GeneratedContentPage = () => {
                       </SimpleGrid>
                     </Flex>
                   </Flex>
-                </Box>
+                </Flex>
               </Box>
             ) : (
-              <SimpleGrid columns={[1]} p={16} gap={4} mt={4}>
+              <SimpleGrid columns={[1]} p={8} gap={4} mt={-4}>
                 {editedSlides.map((slide, index) => (
-                  <Box
-                    key={index}
-                    p={4}
-                    bg="rgba(18, 17, 17, 0.41)"
-                    borderRadius="md"
-                  >
+                  <Box key={index} p={4} bg="gray.700" borderRadius="md">
                     <Flex
-                      align="center"
-                      gap={4}
+                      align="flex-start"
+                      gap={6}
                       flexDirection={index % 2 === 0 ? "row" : "row-reverse"}
+                      justify="center"
                     >
-                      {/* Image section */}
-                      <Image
-                        src={slide.imageUrl || genricimg}
-                        alt="Slide Image"
-                        width="30%"
-                        maxHeight="300px"
-                        objectFit="cover"
-                        borderRadius="lg"
-                      />
+                      {/* Image + Optional Table (on left) */}
+                      <Box width="40%">
+                        <Image
+                          src={slide.imageUrl || genricimg}
+                          alt="Slide Image"
+                          width="100%"
+                          maxHeight="260px"
+                          objectFit="cover"
+                          borderRadius="sm"
+                          boxShadow="lg"
+                        />
+                        {slide.table && (
+                          <Box overflowX="auto">
+                            <SlideTable
+                              headers={slide.table.headers}
+                              rows={slide.table.rows}
+                            />
+                          </Box>
+                        )}
+                      </Box>
 
-                      {/* Text + Subsections section */}
-                      <Box flex="1">
-                        {/* Title input */}
+                      {/* Text + Subsections (always on right) */}
+                      <Box flex="1" maxW="55%">
                         <Input
                           value={slide.title}
                           onChange={(e) => handleTextChange(e, index, "title")}
@@ -256,9 +334,9 @@ const GeneratedContentPage = () => {
                           color="cyan.300"
                           border="none"
                           placeholder="Slide Title"
+                          padding={2}
                         />
 
-                        {/* Subsections */}
                         {slide.subsections?.map((sub, subIndex) => (
                           <Box key={subIndex} mt={4}>
                             <Input
@@ -271,11 +349,11 @@ const GeneratedContentPage = () => {
                                   "subtitle"
                                 )
                               }
-                              fontSize="md"
-                              placeholder="Subtitle"
-                              color="#fff"
-                              border="1px solid #ccc"
-                              bg="transparent"
+                              color="cyan.300"
+                              bg="gray.900"
+                              border="1px solid rgba(255, 255, 255, 0.15)"
+                              _placeholder={{ color: "gray.500" }}
+                              padding={2}
                             />
                             <Textarea
                               value={sub.content}
@@ -287,17 +365,16 @@ const GeneratedContentPage = () => {
                                   "content"
                                 )
                               }
-                              fontSize="sm"
-                              mt={2}
-                              placeholder="Content"
-                              color="#fff"
-                              border="1px solid #ccc"
+                              color="white"
+                              bg="gray.900"
+                              border="1px solid rgba(255, 255, 255, 0.15)"
+                              _placeholder={{ color: "gray.500" }}
                               resize="none"
+                              padding={2}
                             />
                           </Box>
                         ))}
 
-                        {/* Image upload */}
                         <Input
                           type="file"
                           accept="image/*"
@@ -309,17 +386,6 @@ const GeneratedContentPage = () => {
                     </Flex>
                   </Box>
                 ))}
-
-                <Box colSpan={3} display="flex" justifyContent="center" mt={4}>
-                  <Button
-                    onClick={addNewSlide}
-                    bg="#C18800"
-                    color="white"
-                    _hover={{ bg: "#A56A00" }}
-                  >
-                    Add New Slide
-                  </Button>
-                </Box>
               </SimpleGrid>
             )}
 
@@ -359,36 +425,6 @@ const GeneratedContentPage = () => {
               No generated content available
             </Text>
           </Box>
-        )}
-
-        {!isFullscreen && (
-          <HStack
-            position="absolute"
-            top="20px"
-            paddingLeft={"20px"}
-            zIndex={10}
-          >
-            <Button
-              background={"#002329"}
-              variant="solid"
-              color={"white"}
-              paddingX={"20px"}
-              onClick={handleGoBack}
-              ml={"45px"}
-            >
-              Go Back
-            </Button>
-
-            <PPTExport slides={ppt_data} />
-            <Text
-              fontSize="2xl"
-              fontWeight="bold"
-              color={"gray.700"}
-              textAlign={"center"}
-            >
-              {slideHeader}
-            </Text>
-          </HStack>
         )}
       </Box>
     </Box>

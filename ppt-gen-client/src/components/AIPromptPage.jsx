@@ -31,6 +31,7 @@ const AIPromptPage = () => {
     setLoading(true);
     try {
       const res = await fetch("http://68.154.99.58:5000/api/generate-preview", {
+        
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +70,7 @@ const AIPromptPage = () => {
       display="flex"
       flexDirection={{ base: "column", md: "row" }}
       overflow="hidden"
-      bg="linear-gradient(to bottom, #003B67,rgb(1, 4, 30))"
+      bg="linear-gradient(to bottom,rgb(0, 61, 108),rgb(0, 1, 7))"
     >
       <ToastContainer />
 
