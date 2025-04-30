@@ -47,71 +47,71 @@ const PPTExport = ({ slides }) => {
         fontFace: "Calibri",
         color: "#0471E1",
         textTransform: "uppercase",
-        w: "40%",
+        w: "50%",
       });
 
-      const circleSize = 0.5;
+      // const circleSize = 0.5;
 
-      slideData.addShape(pptx.ShapeType.ellipse, {
-        x: "47%",
-        y: "2%",
-        w: circleSize,
-        h: circleSize,
-        fill: { color: "#003F80" },
-      });
-      slideData.addText(sanitizeText("TRL"), {
-        x: "47.4%",
-        y: "6.9%",
-        fontSize: 10,
-        fontFace: "Calibri",
-        bold: true,
-        color: "#FFFFFF",
-        textAlign: "center",
-      });
+      // slideData.addShape(pptx.ShapeType.ellipse, {
+      //   x: "47%",
+      //   y: "2%",
+      //   w: circleSize,
+      //   h: circleSize,
+      //   fill: { color: "#003F80" },
+      // });
+      // slideData.addText(sanitizeText("TRL"), {
+      //   x: "47.4%",
+      //   y: "6.9%",
+      //   fontSize: 10,
+      //   fontFace: "Calibri",
+      //   bold: true,
+      //   color: "#FFFFFF",
+      //   textAlign: "center",
+      // });
 
-      slideData.addShape(pptx.ShapeType.ellipse, {
-        x: "53%",
-        y: "2%",
-        w: circleSize,
-        h: circleSize,
-        fill: { color: "#003F80" },
-      });
-      slideData.addText(sanitizeText("CRI"), {
-        x: "53.4%",
-        y: "6.9%",
-        fontSize: 10,
-        fontFace: "Calibri",
-        bold: true,
-        color: "#FFFFFF",
-        textAlign: "center",
-      });
+      // slideData.addShape(pptx.ShapeType.ellipse, {
+      //   x: "53%",
+      //   y: "2%",
+      //   w: circleSize,
+      //   h: circleSize,
+      //   fill: { color: "#003F80" },
+      // });
+      // slideData.addText(sanitizeText("CRI"), {
+      //   x: "53.4%",
+      //   y: "6.9%",
+      //   fontSize: 10,
+      //   fontFace: "Calibri",
+      //   bold: true,
+      //   color: "#FFFFFF",
+      //   textAlign: "center",
+      // });
 
-      slideData.addShape(pptx.ShapeType.rect, {
-        x: "60%",
-        y: "3%",
-        w: "17%",
-        h: "8%",
-        fill: { color: "#0471E1" },
-      });
+      // slideData.addShape(pptx.ShapeType.rect, {
+      //   x: "60%",
+      //   y: "3%",
+      //   w: "17%",
+      //   h: "8%",
+      //   fill: { color: "#0471E1" },
+      // });
 
-      slideData.addText(
-        sanitizeText(
-          slide.sectionTitle || "Solvent-Based Systems\n- Liquid absorption"
-        ),
-        {
-          x: "60.5%",
-          y: "6.5%",
-          fontSize: 10,
-          bold: true,
-          color: "#FFFFFF",
-          shadow: {
-            type: "outer",
-            color: "#888888",
-            blur: 5,
-            offset: [0, 6],
-          },
-        }
-      );
+      // slideData.addText(
+      //   sanitizeText(
+      //     slide.sectionTitle || "Solvent-Based Systems\n- Liquid absorption"
+      //   ),
+      //   {
+      //     x: "60.5%",
+      //     y: "6.5%",
+      //     fontSize: 10,
+      //     bold: true,
+      //     color: "#FFFFFF",
+      //     shadow: {
+      //       type: "outer",
+      //       color: "#888888",
+      //       blur: 5,
+      //       offset: [0, 6],
+      //     },
+      //   }
+      // );
 
       slideData.addShape(pptx.ShapeType.rect, {
         x: "79%",
