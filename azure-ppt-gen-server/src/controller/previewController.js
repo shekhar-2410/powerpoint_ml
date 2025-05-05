@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import fetchReferenceLinkFromTavily from "../../util/fetchReferenceLinkFromTavily.js";
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const generateImageWithRetry = async (slide, retries = 3) => {
@@ -51,16 +51,17 @@ export const generatePreview = async (req, res) => {
             Follow these rules strictly:
             
             - **Presentation Title**: Summarize the topic in 8 words or fewer, max 60 characters. Avoid trailing punctuation.
-            - **Slides**: Generate 5 to 8 slides that thoroughly cover the topic.
+            - **Slides**: Generate 5 to 7 slides that thoroughly cover the topic.
             - **Each Slide Must Contain**:
-              - A clear, informative **slide title**.
-              - **Four subsections**:
-                - Each must have a **subtitle** and a **content** field.
-                - The **content must be at least 30 words** (or 200 characters) long to ensure depth.
-              - **One table** per slide:
-                - Include **realistic or simulated numerical data**.
-                - Table should have **2 to 5 columns** and **2 to 4 rows**.
-                - Column headers must be relevant to the topic.
+            - A clear, informative **slide title**.
+            - **Four subsections**:
+            - Each must have:
+            - **subtitle**
+            - **content** (at least 25 words or 150 characters)
+            - Include **realistic visuals** and **relevant numerical data**.
+            - **One table** per slide:
+            - Table should have **2 to 5 columns** and **2 to 4 rows**.
+            - Column headers must be relevant to the topic.
             - Return only a **well-formatted JSON** as per the following structure:
             
             {
@@ -69,10 +70,22 @@ export const generatePreview = async (req, res) => {
                 {
                   "title": "Slide title here",
                   "subsections": [
-                    {"subtitle": "Subtitle 1", "content": "Detailed explanation for subtitle 1 (min 30 words)"},
-                    {"subtitle": "Subtitle 2", "content": "Detailed explanation for subtitle 2 (min 30 words)"},
-                    {"subtitle": "Subtitle 3", "content": "Detailed explanation for subtitle 3 (min 30 words)"},
-                    {"subtitle": "Subtitle 4", "content": "Detailed explanation for subtitle 4 (min 30 words)"}
+                    {"subtitle": "Subtitle 1", 
+                    "content": "Detailed explanation for subtitle 1 (min 25 words)", 
+                    "numericalData": "Statistical data or percentage"},
+
+                    {"subtitle": "Subtitle 2", 
+                    "content": "Detailed explanation for subtitle 2 (min 25 words)", 
+                    "numericalData": "Statistical data or percentage"},
+
+                    {"subtitle": "Subtitle 3", 
+                    "content": "Detailed explanation for subtitle 3 (min 25 words)", 
+                    "numericalData": "Statistical data or percentage"},
+                   
+                    {"subtitle": "Subtitle 4", 
+                    "content": "Detailed explanation for subtitle 4 (min 25 words)", 
+                    "numericalData": "Statistical data or percentage"}
+                  
                   ],
       "table": {
         "headers": ["Header 1", "Header 2", "Header 3",],
@@ -80,7 +93,7 @@ export const generatePreview = async (req, res) => {
           ["Row1-Col1", "Row1-Col2", "Row1-Col3", "Row1-Col4"],
           ["Row2-Col1", "Row2-Col2", "Row2-Col3", "Row2-Col4"],
           ["Row3-Col1", "Row3-Col2", "Row3-Col3", "Row3-Col4"],
-          ["Row4-Col1", "Row4-Col2", "Row4-Col3", "Row4-Col4"
+          ["Row4-Col1", "Row4-Col2", "Row4-Col3", "Row4-Col4"]
         
         ]
       }
@@ -90,7 +103,7 @@ export const generatePreview = async (req, res) => {
 }`,
           },
         ],
-        max_completion_tokens: 40000,
+        max_completion_tokens: 6000,
         model: modelName,
       },
       {
@@ -102,29 +115,53 @@ export const generatePreview = async (req, res) => {
     );
 
     let slideText;
+    // After parsing slideText from GPT:
+
     try {
       const rawResponse = textResponse.data.choices[0].message.content;
       const jsonMatch = rawResponse.match(/```json([\s\S]*?)```/);
       const jsonString = jsonMatch ? jsonMatch[1].trim() : rawResponse;
+
       slideText = JSON.parse(jsonString);
     } catch (error) {
-      console.error(
-        "Failed to parse GPT response:",
-        textResponse.data.choices[0].message.content
-      );
-      return res
-        .status(500)
-        .json({ success: false, error: "Invalid JSON format" });
+      console.error("❌ Failed to parse GPT response:", error.message);
+      return res.status(500).json({
+        success: false,
+        error: "Invalid JSON format from OpenAI response",
+        details: error.message,
+      });
     }
 
+    // Flatten all slide/subsection combinations
+    const referenceLinkPromises = slideText.slides.flatMap((slide) =>
+      slide.subsections.map((subsection) =>
+        fetchReferenceLinkFromTavily(`${slide.title}  ${subsection.subtitle}`)
+      )
+    );
+
+    const referenceLinks = await Promise.all(referenceLinkPromises);
+
+    let refIndex = 0;
+    const slidesWithReferences = slideText.slides.map((slide) => {
+      const updatedSubsections = slide.subsections.map((subsection) => ({
+        ...subsection,
+        referenceLink:
+          referenceLinks[refIndex++] || "https://example.com/placeholder",
+      }));
+
+      return {
+        ...slide,
+        subsections: updatedSubsections,
+      };
+    });
+
     // Generate images for each slide
-    const imagePromises = slideText.slides.map((slide) =>
+    const imagePromises = slidesWithReferences.map((slide) =>
       generateImageWithRetry(slide)
     );
     const imageUrls = await Promise.all(imagePromises);
 
-    // Attach images to slides
-    const slidesWithImages = slideText.slides.map((slide, index) => ({
+    const slidesWithImages = slidesWithReferences.map((slide, index) => ({
       ...slide,
       imageUrl:
         imageUrls[index] ||
