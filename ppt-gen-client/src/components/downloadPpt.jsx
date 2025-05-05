@@ -242,8 +242,6 @@ const PPTExport = ({ slides }) => {
           color: "#002329",
         });
 
-        // Add Numerical Data (if present)
-
         slideData.addText(numericalData, {
           x: pos.x,
           y: pos.y + 1.5,
@@ -254,11 +252,10 @@ const PPTExport = ({ slides }) => {
           color: "#444",
         });
 
-        // Add Reference Link (if present)
         slideData.addText(
           [
             {
-              text: "Link",
+              text: "Refernece Link",
               options: {
                 hyperlink: {
                   url: referenceLink,
