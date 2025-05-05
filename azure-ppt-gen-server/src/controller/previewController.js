@@ -57,7 +57,7 @@ export const generatePreview = async (req, res) => {
             - **Four subsections**:
             - Each must have:
             - **subtitle**
-            - **content** (at least 25 words or 150 characters)
+            - **content** (maximum 25 words or 100 characters)
             - Include **realistic visuals** and **relevant numerical data**.
             - **One table** per slide:
             - Table should have **2 to 5 columns** and **2 to 4 rows**.
