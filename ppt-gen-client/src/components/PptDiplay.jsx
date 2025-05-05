@@ -23,6 +23,7 @@ const GeneratedContentPage = () => {
   const navigate = useNavigate();
   const ppt_data = location.state?.slides;
   const slides = location.state?.slides?.slides || [];
+  console.log(slides);
   const slideHeader = location.state?.slides?.title || "Title of the slides";
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -220,12 +221,12 @@ const GeneratedContentPage = () => {
                     direction={{ base: "column", md: "row" }}
                     gap={6}
                     width="100%"
-                    maxW="1200px"
+                    // maxW="1200px"
                   >
                     {/* Left Section */}
                     <Flex
                       direction="column"
-                      flex="0.8"
+                      flex="0"
                       bg="gray.800"
                       p={4}
                       borderRadius="sm"
@@ -252,7 +253,7 @@ const GeneratedContentPage = () => {
                     {/* Right Section */}
                     <Flex
                       direction="column"
-                      flex="1"
+                      flex="1.8"
                       bg="gray.800"
                       p={6}
                       borderRadius="md"
@@ -286,6 +287,23 @@ const GeneratedContentPage = () => {
                             <Text fontSize="sm" opacity={0.9}>
                               {sub.content}
                             </Text>
+                            <Text mt={2} fontSize="xs" color={"cyan.400"}>
+                              {sub.numericalData}
+                            </Text>
+                            {/* link */}
+                            {sub?.referenceLink && (
+                              <Text
+                                fontSize="xs"
+                                color="cyan.300"
+                                mt={2}
+                                as="a"
+                                href={sub?.referenceLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Read more →
+                              </Text>
+                            )}
                           </Box>
                         ))}
                       </SimpleGrid>
@@ -370,8 +388,36 @@ const GeneratedContentPage = () => {
                               border="1px solid rgba(255, 255, 255, 0.15)"
                               _placeholder={{ color: "gray.500" }}
                               resize="none"
-                              padding={2}
+                              paddingX={2}
+                              paddingY={4}
                             />
+                            <Box
+                              color="white"
+                              bg="gray.900"
+                              border="1px solid rgba(255, 255, 255, 0.15)"
+                              _placeholder={{ color: "gray.500" }}
+                              resize="none"
+                              padding={2}
+                              borderRadius="sm"
+                              mt={"-5.5px"}
+                            >
+                              <Text fontSize="xs" color={"cyan.400"}>
+                                {sub.numericalData}
+                              </Text>
+                              {/* link */}
+                              {sub?.referenceLink && (
+                                <Text
+                                  fontSize="xs"
+                                  color="cyan.300"
+                                  as="a"
+                                  href={sub?.referenceLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Read more
+                                </Text>
+                              )}
+                            </Box>
                           </Box>
                         ))}
 

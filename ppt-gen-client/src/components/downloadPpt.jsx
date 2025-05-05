@@ -5,6 +5,7 @@ import placeholderImage from "../assets/generic.png";
 import logo from "../assets/flower.png";
 
 const PPTExport = ({ slides }) => {
+  console.log("Slides data:", slides);
   const generatePPT = async () => {
     const pptx = new pptxgen();
     const slidesArray = slides?.slides || [];
@@ -203,39 +204,77 @@ const PPTExport = ({ slides }) => {
       }
 
       const sectionPositions = [
-        { x: "40%", y: 1.1 },
-        { x: "68%", y: 1.1 },
+        { x: "40%", y: 1 },
+        { x: "68%", y: 1 },
         { x: "40%", y: 3.3 },
         { x: "68%", y: 3.3 },
       ];
 
-      const sectionWidth = "28%";
-      const sectionHeight = "10%";
+      const sectionWidth = "29%";
+      const sectionHeight = "5%";
 
       (slide.subsections || []).slice(0, 4).forEach((sub, index) => {
         const pos = sectionPositions[index];
 
-        slideData.addText(
-          sanitizeText(sub.subtitle || `Section ${index + 1}`),
-          {
-            x: pos.x,
-            y: pos.y,
-            w: sectionWidth,
-            h: sectionHeight,
-            fontSize: 13,
-            bold: true,
-            color: "#0471E1",
-          }
-        );
+        const subtitle = sanitizeText(sub.subtitle || `Section ${index + 1}`);
+        const content = sanitizeText(sub.content || "No content available");
+        const numericalData = sanitizeText(sub.numericalData || "");
+        const referenceLink = sanitizeText(sub.referenceLink || "");
 
-        slideData.addText(sanitizeText(sub.content || "No content available"), {
+        // Add Subtitle
+        slideData.addText(subtitle, {
           x: pos.x,
-          y: pos.y + 0.8,
+          y: pos.y,
           w: sectionWidth,
           h: sectionHeight,
+          fontSize: 13,
+          bold: true,
+          color: "#0471E1",
+        });
+
+        // Add Content
+        slideData.addText(content, {
+          x: pos.x,
+          y: pos.y + 0.5,
+          w: sectionWidth,
+          h: "15%",
           fontSize: 10,
           color: "#002329",
         });
+
+        // Add Numerical Data (if present)
+
+        slideData.addText(numericalData, {
+          x: pos.x,
+          y: pos.y + 1.5,
+          w: "30%",
+          h: "5%",
+          fontSize: 9,
+          italic: true,
+          color: "#444",
+        });
+
+        // Add Reference Link (if present)
+        slideData.addText(
+          [
+            {
+              text: "Link",
+              options: {
+                hyperlink: {
+                  url: referenceLink,
+                },
+              },
+            },
+          ],
+          {
+            x: pos.x,
+            y: pos.y + 1.7,
+            w: "10%",
+            h: "4%",
+            fontSize: 9,
+            color: "#0471E1",
+          }
+        );
       });
 
       slideData.addShape(pptx.ShapeType.rect, {
