@@ -88,12 +88,12 @@ export const generatePreview = async (req, res) => {
                   
                   ],
       "table": {
-        "headers": ["Header 1", "Header 2", "Header 3",],
+        "headers": ["Header 1", "Header 2", "Header 3",
         "rows": [
           ["Row1-Col1", "Row1-Col2", "Row1-Col3", "Row1-Col4"],
           ["Row2-Col1", "Row2-Col2", "Row2-Col3", "Row2-Col4"],
           ["Row3-Col1", "Row3-Col2", "Row3-Col3", "Row3-Col4"],
-          ["Row4-Col1", "Row4-Col2", "Row4-Col3", "Row4-Col4"]
+        
         
         ]
       }
