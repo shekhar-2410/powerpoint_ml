@@ -301,7 +301,7 @@ const GeneratedContentPage = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                Refernece Link
+                                Reference Link
                               </Text>
                             )}
                           </Box>
@@ -414,7 +414,7 @@ const GeneratedContentPage = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  Refernece Link
+                                  Reference Link
                                 </Text>
                               )}
                             </Box>

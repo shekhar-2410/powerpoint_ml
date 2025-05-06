@@ -244,7 +244,7 @@ const PPTExport = ({ slides }) => {
 
         slideData.addText(numericalData, {
           x: pos.x,
-          y: pos.y + 1.5,
+          y: pos.y + 1.6,
           w: "30%",
           h: "5%",
           fontSize: 9,
@@ -255,7 +255,7 @@ const PPTExport = ({ slides }) => {
         slideData.addText(
           [
             {
-              text: "Refernece Link",
+              text: "Reference Link",
               options: {
                 hyperlink: {
                   url: referenceLink,
@@ -265,7 +265,7 @@ const PPTExport = ({ slides }) => {
           ],
           {
             x: pos.x,
-            y: pos.y + 1.7,
+            y: pos.y + 1.8,
             w: "10%",
             h: "4%",
             fontSize: 9,
